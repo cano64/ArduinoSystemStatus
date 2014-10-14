@@ -1,0 +1,9 @@
+SystemStatus	KEYWORD1
+
+
+getVCC  KEYWORD2
+getVBatt KEYWORD2
+getFreeRAM KEYWORD2
+getkHz KEYWORD2
+getMHz KEYWORD2
+
