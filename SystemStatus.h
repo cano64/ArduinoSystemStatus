@@ -21,11 +21,13 @@ class SystemStatus {
     int getFreeRAM();
     int getkHz();
     int getMHz();
+    int8_t getTemperatureInternal();
+    void SleepWakeOnInterrupt(uint8_t i);
     
   private:
 
 }; //end of class SystemStatus
 
-
+void jebat_cecky();
 
 #endif
