@@ -77,7 +77,7 @@ int8_t SystemStatus::getTemperatureInternal() {
     Voltage     / mV 242 mV 314 mV 380 mV
   */
   ADMUX = (1<<REFS0) | (1<<REFS1) | (1<<MUX3); //turn 1.1V reference and select ADC8
-  delay(1); //wait for internal reference to settle
+  delay(2); //wait for internal reference to settle
 	// start the conversion
 	ADCSRA |= bit(ADSC);
 	//sbi(ADCSRA, ADSC);
@@ -86,8 +86,13 @@ int8_t SystemStatus::getTemperatureInternal() {
 	//while (bit_is_set(ADCSRA, ADSC));
 	uint8_t low  = ADCL;
 	uint8_t high = ADCH;
+	//discard first reading
+	ADCSRA |= bit(ADSC);
+	while (ADCSRA & bit(ADSC));
+	low  = ADCL;
+	high = ADCH;
 	int a = (high << 8) | low;
-  return a - 270; //return temperature in C
+  return a - 272; //return temperature in C
 }
 
 
