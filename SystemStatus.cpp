@@ -13,6 +13,10 @@ SystemStatus::SystemStatus(uint8_t apin_batt) : pin_batt(apin_batt) {
 
 }
 
+SystemStatus::SystemStatus() : pin_batt(255) {
+
+}
+
 
 int SystemStatus::getVCC() {
   //reads internal 1V1 reference against VCC
@@ -41,6 +45,7 @@ int SystemStatus::getVCC() {
 
 
 int SystemStatus::getVBatt(int vcc) {
+  if (this->pin_batt == 255) return 0;
   unsigned int a = analogRead(this->pin_batt); //discard first reading
   a = analogRead(this->pin_batt);
   return (long)vcc * (long)a / 1024;
@@ -102,11 +107,15 @@ void SystemStatus::SleepWakeOnInterrupt(uint8_t i) {
   
   set_sleep_mode(SLEEP_MODE_PWR_DOWN);
   power_adc_disable();
-  power_spi_disable();
+  #if defined(__AVR_ATmega328P__)
+    power_spi_disable();
+  #endif
   power_timer0_disable();
   power_timer1_disable();
-  power_timer2_disable();
-  power_twi_disable();  
+  #if defined(__AVR_ATmega328P__)
+    power_timer2_disable();
+    power_twi_disable();  
+  #endif
   sleep_enable();
   sleep_bod_disable();
   sei(); //first instruction after SEI is guaranteed to execute before any interrupt

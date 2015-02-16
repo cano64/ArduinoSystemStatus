@@ -16,6 +16,7 @@ class SystemStatus {
     uint8_t pin_batt;
     
     SystemStatus(uint8_t apin_batt);
+    SystemStatus();
     int getVCC();
     int getVBatt(int vcc);
     int getFreeRAM();
