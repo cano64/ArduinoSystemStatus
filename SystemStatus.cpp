@@ -36,10 +36,10 @@ SystemStatus::SystemStatus() : pin_batt(255) {
 
 int SystemStatus::getVCC() {
   //reads internal 1V1 reference against VCC
-  #if defined(__AVR_ATtiny84__)
+  #if defined(__AVR_ATtiny84__) || defined(__AVR_ATtiny44__)
     ADMUX = _BV(MUX5) | _BV(MUX0); // For ATtiny84
-  #elif defined(__AVR_ATtiny85__)
-    ADMUX = _BV(MUX3) | _BV(MUX2); // For ATtiny85
+  #elif defined(__AVR_ATtiny85__) || defined(__AVR_ATtiny45__)
+    ADMUX = _BV(MUX3) | _BV(MUX2); // For ATtiny85/45
   #elif defined(__AVR_ATmega1284P__)
     ADMUX = _BV(REFS0) | _BV(MUX4) | _BV(MUX3) | _BV(MUX2) | _BV(MUX1);  // For ATmega1284
   #else
@@ -94,7 +94,7 @@ int SystemStatus::getMHz() {
 
 int8_t SystemStatus::getTemperatureInternal() {
   /* from the data sheet
-    Temperature / 캜 -45캜 +25캜 +85캜
+    Temperature / 째C -45째C +25째C +85째C
     Voltage     / mV 242 mV 314 mV 380 mV
   */
   ADMUX = (1<<REFS0) | (1<<REFS1) | (1<<MUX3); //turn 1.1V reference and select ADC8
